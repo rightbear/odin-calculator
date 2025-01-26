@@ -1,0 +1,51 @@
+body {
+    font-family: Roboto, sans-serif;
+    margin: 0;
+    overflow: hidden;
+    min-height: 100vh;
+
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 40vh;
+    width: 300px;
+    padding: 5px;
+    margin: auto;
+
+    justify-content: center;
+    align-items: stretch;
+
+    outline: 2px solid black;
+}
+
+.screen {
+    font-size: 30px;
+    margin: 2px;
+    padding: 5px;
+    display: flex;
+    flex: 1 1 auto;
+    
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;  
+    
+    outline: 2px solid red;
+}
+
+.buttons {
+    margin: 2px;
+
+    display: flex;
+    flex-direction: row;
+    flex: 6 1 auto;
+
+    outline: 2px solid red;
+}
+
