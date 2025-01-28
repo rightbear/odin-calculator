@@ -14,9 +14,10 @@ body {
 /************************************/
 
 .panel {
+    background-color: black;
     min-height: 50vh;
     width: 400px;
-    padding: 5px;
+    padding: 10px;
     margin: auto;
 
     display: flex;
@@ -25,12 +26,15 @@ body {
     align-items: stretch;
     gap: 5px;
 
-    outline: 2px solid black;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 8px;
 }
 
 /************************************/
 
 .screen {
+    background-color: azure;
     font-size: 50px;
     padding: 1px 2px;
     min-width: none;
@@ -82,9 +86,17 @@ body {
 
 /************************************/
 
-.left-number button {
+.left-number button,
+.right-operator button {
+    text-align: center;
+    text-decoration: none;
     font-size: 50px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 8px;
+}
 
+.left-number button {
     display: flex;
     flex-direction: row;
     height: 65px;
@@ -95,8 +107,6 @@ body {
 }
 
 .right-operator button {
-    font-size: 50px;
-
     display: flex;
     flex-direction: row;
     height: 90px;
