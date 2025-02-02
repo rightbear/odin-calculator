@@ -36,8 +36,9 @@ body {
 .screen {
     background-color: azure;
     font-size: 50px;
-    padding: 1px 2px;
-    min-width: none;
+    padding: 5px 10px;
+    margin: 5px;
+    min-width: 300px;
 
     display: flex;
     flex: 1 1 auto;
@@ -106,7 +107,7 @@ body {
     align-items: center;  
 }
 
-.left-number #number-p-m {
+.left-number #number-symbol {
     font-size: 40px;
 }
 

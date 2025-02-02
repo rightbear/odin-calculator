@@ -29,24 +29,87 @@ function divide(num1, num2){
   return num1 / num2;
 }
 
-let calculateStart = true;
-let calculateResult = false;
-const numberButtons = document.querySelectorAll(".num");
 const calculatorScreen = document.querySelector(".screen");
 
-function displayNumber(numberButtons){
-  
-  numberButtons.forEach((number) => {
-    number.addEventListener('click', function displayNumber(event){
+//judge wether the input of digits is start
+let inputStart = false;
 
-      // if there is old squares in container of grid, remove all squares.
-      if (calculateStart || calculateResult) {
-        calculateStart = false;
-        calculatorScreen.textContent = number.textContent;
+//judge wether the calculation is finished
+let calculateResult = false;
+
+let operand1 = 0, operand2 = 0, operator='';
+
+const numberButtons = document.querySelectorAll(".num");
+const dotButtons = document.querySelector("#number-dot");
+const symbolButtons = document.querySelector("#number-symbol");
+const binaryOpButtons = document.querySelectorAll(".binary");
+const equalOpButtons = document.querySelector("#operator-equal");
+const clearOpButtons = document.querySelector("#operator-clear");
+
+function Calculation(){
+
+  numberButtons.forEach((number) => {
+    number.addEventListener('click', event => {
+      let displayStringNum = calculatorScreen.textContent;
+      let inputStringNum = number.textContent;
+
+      // there is no previously input number or the number displayed is calculation result
+      // the newly input number should substitued the number displayed
+      if (inputStart == false || calculateResult == true) {
+
+        // if the newly input number is 0, the input is still invalid
+        if(inputStringNum != '0' ){
+          inputStart = true;
+        }
+        calculateResult = false;
+
+        displayStringNum = inputStringNum;
       }
+      // the newly input number should concatenated on the previously input number
       else{
-        calculatorScreen.textContent += number.textContent;
+        displayStringNum += inputStringNum;
       }
+
+      calculatorScreen.textContent = displayStringNum;
     })
   })
+
+  dotButtons.addEventListener('click', event => {
+    let displayStringNum = calculatorScreen.textContent;
+
+    // there is no previously input number or the number displayed is calculation result
+    // the newly input number should substitued the number displayed
+    if(!inputStart){
+      inputStart = true;
+    }
+    if(calculateResult){
+      displayStringNum = '0.';
+      calculateResult = false;
+    }
+
+    if(!displayStringNum.includes('.')){
+      displayStringNum += '.';
+    }
+
+    calculatorScreen.textContent = displayStringNum;
+  })
+
+  symbolButtons.addEventListener('click', event => {
+    let displayStringNum = calculatorScreen.textContent;
+
+    // if number displayed is NaN, the symbol of number won't be modified
+    if(displayStringNum != NaN){
+      let displayNumber = Number(displayStringNum);
+      displayNumber = -displayNumber;
+      displayStringNum = String(displayNumber);
+      
+      if(displayNumber == 0){
+        inputStart = false;
+        calculateResult = false;
+      }
+    }
+    calculatorScreen.textContent = displayStringNum;
+  })
 }
+
+Calculation()
