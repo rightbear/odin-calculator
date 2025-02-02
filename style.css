@@ -106,6 +106,10 @@ body {
     align-items: center;  
 }
 
+.left-number #number-p-m {
+    font-size: 40px;
+}
+
 .right-operator button {
     display: flex;
     flex-direction: row;
