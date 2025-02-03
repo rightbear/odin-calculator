@@ -103,27 +103,27 @@ function Calculation(){
 
   symbolButtons.addEventListener('click', event => {
     let displayStringNum = calculatorScreen.textContent;
-
+    let oldResult;
     // if number displayed is NaN, the symbol of number won't be modified
     if(displayStringNum != 'NaN'){
       let displayNumber = Number(displayStringNum);
+      oldResult = displayNumber;
       displayNumber = -displayNumber;
       displayStringNum = String(displayNumber);
     }
 
     newOperand = Number(displayStringNum);
-    asignNewOperand = true;
-    calculatorScreen.textContent = displayStringNum;
-  })
 
-  clearOpButtons.addEventListener('click', event => {
-    let displayStringNum = calculatorScreen.textContent;
-    inputStart = false;
-    calculateResult = true;
-    displayStringNum = '0';
-    newOperand = 0;
-    result = 0;
+    // the situation of clicking binary operator before symbol operator 
+    if(inputStart == false){
+      result = oldResult;
+    }
+    // the situation of clicking equal operator before symbol operator 
+    if(calculateResult == true){
+      result = 0;
+    }
     operator = '+';
+    asignNewOperand = true;
     calculatorScreen.textContent = displayStringNum;
   })
 
@@ -149,10 +149,44 @@ function Calculation(){
           displayStringNum = 'NaN';
         }
       }
+
       inputStart = false;
       operator = newOperator;
       calculatorScreen.textContent = displayStringNum;
     })
+  })
+
+  equalOpButtons.addEventListener('click', event => {
+    let displayStringNum = calculatorScreen.textContent;
+    if(result != 'NaN'){
+      if(operator == '÷' && newOperand == 0){
+        result = 'NaN';
+        displayStringNum = 'NaN';
+      }
+      else{
+        result = operate(result, newOperand, operator);
+        asignNewOperand = false;
+        displayStringNum = String(result);
+      }
+    }
+    else{
+      displayStringNum = 'NaN';
+    }
+
+    calculateResult = true;
+    calculatorScreen.textContent = displayStringNum;
+  })
+
+  clearOpButtons.addEventListener('click', event => {
+    let displayStringNum = calculatorScreen.textContent;
+    inputStart = false;
+    calculateResult = true;
+    asignNewOperand = false;
+    displayStringNum = '0';
+    newOperand = 0;
+    result = 0;
+    operator = '+';
+    calculatorScreen.textContent = displayStringNum;
   })
 }
 
