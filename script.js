@@ -110,6 +110,14 @@ function Calculation(){
     }
     calculatorScreen.textContent = displayStringNum;
   })
+
+  clearOpButtons.addEventListener('click', event => {
+    let displayStringNum = calculatorScreen.textContent;
+    inputStart = false;
+    calculateResult = false;
+    displayStringNum = '0';
+    calculatorScreen.textContent = displayStringNum;
+  })
 }
 
 Calculation()
