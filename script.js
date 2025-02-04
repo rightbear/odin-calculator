@@ -66,6 +66,11 @@ function Calculation(){
           calculateResult = false;
         }
 
+        // clear previous calculation result, maybe fault
+        if(calculateResult == true){
+          result = 0;
+        }
+
         displayStringNum = inputStringNum;
       }
       // the newly input number should concatenated on the previously input number
@@ -93,6 +98,8 @@ function Calculation(){
 
     if(calculateResult == true){
       displayStringNum = '0.';
+      // clear previous calculation result, maybe fault
+      result = 0;
       calculateResult = false;
     }
 
@@ -114,11 +121,13 @@ function Calculation(){
 
     newOperand = Number(displayStringNum);
 
-    // the situation of clicking binary operator before symbol operator 
+    // the situation of clicking binary operator before symbol operator
+    // keep previous calculation result
     if(inputStart == false){
       result = oldResult;
     }
-    // the situation of clicking equal operator before symbol operator 
+    // the situation of clicking equal operator before symbol operator
+    // clear previous calculation result
     if(calculateResult == true){
       result = 0;
     }
@@ -158,6 +167,7 @@ function Calculation(){
 
   equalOpButtons.addEventListener('click', event => {
     let displayStringNum = calculatorScreen.textContent;
+    
     if(result != 'NaN'){
       if(operator == '÷' && newOperand == 0){
         result = 'NaN';
