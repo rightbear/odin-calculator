@@ -31,13 +31,13 @@ function divide(num1, num2){
 
 const calculatorScreen = document.querySelector(".screen");
 
-//judge wether the input of digits in calculation is start
+// judge wether the input of digits in new calculation is start
 let inputStart = false;
 
-//judge wether the calculation is finished
+// judge wether the previous calculation is finished
 let calculateResult = true;
 
-//judge wether the new perand in calculation is asigned
+// judge wether the new operand in new calculation is asigned
 let asignNewOperand = false;
 
 let result = 0, newOperand = 0, operator='+';
@@ -60,15 +60,16 @@ function Calculation(){
       // the newly input number should substitued the number displayed
       if (inputStart == false || calculateResult == true) {
 
+        // clear previous calculation result, maybe fault
+        if(calculateResult == true){
+          result = 0;
+          operator = '+';
+        }
+
         // if the newly input number is 0, the input is still invalid
         if(inputStringNum != '0' ){
           inputStart = true;
           calculateResult = false;
-        }
-
-        // clear previous calculation result, maybe fault
-        if(calculateResult == true){
-          result = 0;
         }
 
         displayStringNum = inputStringNum;
@@ -90,9 +91,6 @@ function Calculation(){
     // there is no previously input number or the number displayed is calculation result
     // the newly input number should substitued the number displayed
     if(!displayStringNum.includes('.')){
-      if(inputStart == false){
-        inputStart = true;
-      }
       displayStringNum += '.';
     }
 
@@ -100,7 +98,12 @@ function Calculation(){
       displayStringNum = '0.';
       // clear previous calculation result, maybe fault
       result = 0;
+      operator = '+';
       calculateResult = false;
+    }
+
+    if(inputStart == false){
+      inputStart = true;
     }
 
     newOperand = Number(displayStringNum);
@@ -121,17 +124,20 @@ function Calculation(){
 
     newOperand = Number(displayStringNum);
 
+    // the situation of clicking equal operator before symbol operator,
+    // or the situation of clicking digit buttons before symbol operator
+    // clear previous calculation result
+    if(calculateResult == true || inputStart == true){
+      // clear previous calculation result, maybe fault
+      result = 0;
+      operator = '+';
+    }
     // the situation of clicking binary operator before symbol operator
     // keep previous calculation result
-    if(inputStart == false){
+    else{
       result = oldResult;
     }
-    // the situation of clicking equal operator before symbol operator
-    // clear previous calculation result
-    if(calculateResult == true){
-      result = 0;
-    }
-    operator = '+';
+
     asignNewOperand = true;
     calculatorScreen.textContent = displayStringNum;
   })
@@ -160,6 +166,7 @@ function Calculation(){
       }
 
       inputStart = false;
+      calculateResult = false;
       operator = newOperator;
       calculatorScreen.textContent = displayStringNum;
     })
@@ -168,21 +175,25 @@ function Calculation(){
   equalOpButtons.addEventListener('click', event => {
     let displayStringNum = calculatorScreen.textContent;
     
-    if(result != 'NaN'){
-      if(operator == '÷' && newOperand == 0){
-        result = 'NaN';
-        displayStringNum = 'NaN';
+    if(asignNewOperand){
+      if(result != 'NaN'){
+        if(operator == '÷' && newOperand == 0){
+          result = 'NaN';
+          displayStringNum = 'NaN';
+        }
+        else{
+          result = operate(result, newOperand, operator);
+          asignNewOperand = false;
+          displayStringNum = String(result);
+        }
       }
       else{
-        result = operate(result, newOperand, operator);
-        asignNewOperand = false;
-        displayStringNum = String(result);
+        displayStringNum = 'NaN';
       }
     }
-    else{
-      displayStringNum = 'NaN';
-    }
 
+    asignNewOperand = false;
+    inputStart = false;
     calculateResult = true;
     calculatorScreen.textContent = displayStringNum;
   })
