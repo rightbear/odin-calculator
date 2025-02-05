@@ -14,19 +14,49 @@ function operate(num1, num2, operator) {
 }
 
 function add(num1, num2){
-  return num1 + num2;
+  return (num1 * (10**13) + num2 * (10**13)) / (10**13);
 }
 
 function substract(num1, num2){
-  return num1 - num2;
+  return (num1 * (10**13) - num2 * (10**13)) / (10**13);
 }
 
 function multiply(num1, num2){
-  return num1 * num2;
+  return ((num1 * (10**13)) * (num2 * (10**13))) / (10**26);
 }
 
 function divide(num1, num2){
-  return num1 / num2;
+  return ((num1 * (10**13)) / (num2 * (10**13)));
+}
+
+function preciseRound(number, decimalPlaces) {
+  const factor = 10 ** decimalPlaces;
+  return Number(Math.round((number + Number.EPSILON) * factor) / factor);
+}
+
+function modifyInputStringNum(StringNum) {
+  let displayStringNum = StringNum;
+
+  if(displayStringNum.includes('.')){
+    if(displayStringNum.length >= 14){
+      if(displayStringNum.indexOf('.') < 13){
+        displayStringNum = displayStringNum.substring(0, 14);
+      }
+      else{
+        displayStringNum = displayStringNum.substring(0, 13);
+      }
+    }
+  }
+  else{
+    if(displayStringNum.length >= 13){
+      displayStringNum = displayStringNum.substring(0, 13);
+    }
+  }
+
+  console.log(StringNum);
+  console.log(displayStringNum);
+
+  return displayStringNum;
 }
 
 const calculatorScreen = document.querySelector(".screen");
@@ -104,7 +134,7 @@ function Calculation(){
       }
 
       asignNewOperand = true;
-      calculatorScreen.textContent = StringNum;
+      calculatorScreen.textContent = modifyInputStringNum(StringNum);
     })
   })
 
@@ -134,7 +164,7 @@ function Calculation(){
     }
 
     asignNewOperand = true;
-    calculatorScreen.textContent = StringNum;
+    calculatorScreen.textContent = modifyInputStringNum(StringNum);
   })
 
   symbolButtons.addEventListener('click', event => {
@@ -166,7 +196,7 @@ function Calculation(){
     }
 
     asignNewOperand = true;
-    calculatorScreen.textContent = StringNum;
+    calculatorScreen.textContent = modifyInputStringNum(StringNum);
   })
 
   binaryOpButtons.forEach((operatorButton) => {
@@ -183,7 +213,23 @@ function Calculation(){
           else{
             result = operate(result, newOperand, oldOperator);
             newOperand = result;
-            StringNum = String(result);
+
+            ///processing format of calculation result
+            displayNum = result;
+            displayStringNum = String(result);
+
+            /*
+            if(displayStringNum.include('.')){
+
+            }
+            else{
+              if(displayStringNum.length > 13)
+              displayStringNum = displayStringNum.substr(0, 13);
+            }
+              */
+            ///
+            
+            StringNum = displayStringNum
           }
         }
         else{
@@ -210,7 +256,13 @@ function Calculation(){
         else{
           result = operate(result, newOperand, operator);
           newOperand = result;
-          StringNum = String(result);
+
+          ///processing format of calculation result
+          displayNum = result;
+          displayStringNum = String(result);
+          ///
+
+          StringNum = displayStringNum
         }
       }
       else{
@@ -237,8 +289,6 @@ function Calculation(){
     result = 0;
     operator = '+';
     calculatorScreen.textContent = displayStringNum;
-
-    console.clear()
   })
 }
 
