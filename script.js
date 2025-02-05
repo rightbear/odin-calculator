@@ -31,6 +31,7 @@ function divide(num1, num2){
 }
 
 // Round the resut of operation
+// Source: https://realnewbie.com/coding/javascript/javascript-round/
 function preciseRound(number, decimalPlaces) {
   const factor = 10 ** decimalPlaces;
   return Number(Math.round((number + Number.EPSILON) * factor) / factor);

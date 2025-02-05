@@ -11,6 +11,15 @@ body {
     justify-content: center;
 }
 
+button{
+    opacity: 0.75;
+    transition: 0.3s;
+}
+
+button:hover {
+    opacity: 1
+}
+
 /************************************/
 
 .panel {
@@ -119,4 +128,24 @@ body {
 
     justify-content: center;
     align-items: center; 
+}
+
+.num {
+    background-color: #800000;
+    color: white;
+}
+
+#number-dot,
+#number-symbol{
+    background-color: #40E0D0;
+}
+
+.binary{
+    background-color: #000080;
+    color: white;
+}
+
+#operator-equal,
+#operator-clear{
+    background-color: #DAA520;
 }
