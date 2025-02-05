@@ -41,6 +41,7 @@ let calculateResult = true;
 let asignNewOperand = false;
 
 let result = 0, newOperand = 0, operator='+';
+let indexOfTen = 0, StringNum = '0';
 
 const numberButtons = document.querySelectorAll(".num");
 const dotButtons = document.querySelector("#number-dot");
@@ -53,7 +54,6 @@ function Calculation(){
 
   numberButtons.forEach((number) => {
     number.addEventListener('click', event => {
-      let displayStringNum = calculatorScreen.textContent;
       let inputStringNum = number.textContent;
 
       // there is no previously input number or the number displayed is calculation result
@@ -63,6 +63,7 @@ function Calculation(){
         // clear previous calculation result, maybe fault
         if(calculateResult == true){
           result = 0;
+          newOperand = 0;
           operator = '+';
         }
 
@@ -72,79 +73,104 @@ function Calculation(){
           calculateResult = false;
         }
 
-        displayStringNum = inputStringNum;
+        //update number on screen
+        StringNum = inputStringNum;
+        //update number in operand
+        newOperand = Number(inputStringNum);
       }
       // the newly input number should concatenated on the previously input number
       else{
-        displayStringNum += inputStringNum;
+        //update number on screen
+        StringNum += inputStringNum;
+
+        //update number in operand
+        if(indexOfTen < 0){
+          if(newOperand >= 0){
+            newOperand = newOperand + Number(inputStringNum) * (10 ** indexOfTen);
+          }
+          else{
+            newOperand = newOperand - Number(inputStringNum) * (10 ** indexOfTen);
+          }
+          indexOfTen -= 1;
+        }
+        else{
+          if(newOperand >= 0){
+            newOperand = newOperand * 10 + Number(inputStringNum);
+          }
+          else{
+            newOperand = newOperand * 10 - Number(inputStringNum);
+          }
+        }
       }
 
-      newOperand = Number(displayStringNum);
       asignNewOperand = true;
-      calculatorScreen.textContent = displayStringNum;
+      calculatorScreen.textContent = StringNum;
     })
   })
 
   dotButtons.addEventListener('click', event => {
-    let displayStringNum = calculatorScreen.textContent;
-
     // there is no previously input number or the number displayed is calculation result
     // the newly input number should substitued the number displayed
-    if(!displayStringNum.includes('.')){
-      displayStringNum += '.';
+    if(!StringNum.includes('.') && !String(newOperand).includes('.')){
+      StringNum += '.';
+
+      indexOfTen = -1;
     }
 
     if(calculateResult == true){
-      displayStringNum = '0.';
+      StringNum = '0.';
       // clear previous calculation result, maybe fault
       result = 0;
+      newOperand = 0;
       operator = '+';
       calculateResult = false;
+
+      indexOfTen = -1;
+      console.clear()
     }
 
     if(inputStart == false){
       inputStart = true;
     }
 
-    newOperand = Number(displayStringNum);
     asignNewOperand = true;
-    calculatorScreen.textContent = displayStringNum;
+    calculatorScreen.textContent = StringNum;
   })
 
   symbolButtons.addEventListener('click', event => {
-    let displayStringNum = calculatorScreen.textContent;
     let oldResult;
+
     // if number displayed is NaN, the symbol of number won't be modified
-    if(displayStringNum != 'NaN'){
-      let displayNumber = Number(displayStringNum);
-      oldResult = displayNumber;
-      displayNumber = -displayNumber;
-      displayStringNum = String(displayNumber);
+    if(StringNum != 'NaN'){
+      if(newOperand == 0){
+        StringNum = '0';
+      }
+      else if(newOperand > 0){
+        StringNum = '-' + StringNum;
+      }
+      else{
+        StringNum = StringNum.replace('-', '');
+      }
+
+      newOperand = -newOperand;
     }
-
-    newOperand = Number(displayStringNum);
-
+    
     // the situation of clicking equal operator before symbol operator,
     // or the situation of clicking digit buttons before symbol operator
     // clear previous calculation result
-    if(calculateResult == true || inputStart == true){
+    if(calculateResult == true){
       // clear previous calculation result, maybe fault
       result = 0;
       operator = '+';
-    }
-    // the situation of clicking binary operator before symbol operator
-    // keep previous calculation result
-    else{
-      result = oldResult;
+      calculateResult = false;
     }
 
     asignNewOperand = true;
-    calculatorScreen.textContent = displayStringNum;
+    calculatorScreen.textContent = StringNum;
   })
 
   binaryOpButtons.forEach((operatorButton) => {
     operatorButton.addEventListener('click', event => {
-      let displayStringNum = calculatorScreen.textContent;
       let oldOperator = operator;
       let newOperator = operatorButton.textContent;
 
@@ -152,50 +178,51 @@ function Calculation(){
         if(result != 'NaN'){
           if(oldOperator == '÷' && newOperand == 0){
             result = 'NaN';
-            displayStringNum = 'NaN';
+            StringNum = 'NaN';
           }
           else{
             result = operate(result, newOperand, oldOperator);
-            asignNewOperand = false;
-            displayStringNum = String(result);
+            newOperand = result;
+            StringNum = String(result);
           }
         }
         else{
-          displayStringNum = 'NaN';
+          StringNum = 'NaN';
         }
       }
-
+      
+      indexOfTen = 0;
+      asignNewOperand = false;
       inputStart = false;
       calculateResult = false;
       operator = newOperator;
-      calculatorScreen.textContent = displayStringNum;
+      calculatorScreen.textContent = StringNum;
     })
   })
 
   equalOpButtons.addEventListener('click', event => {
-    let displayStringNum = calculatorScreen.textContent;
-    
     if(asignNewOperand){
       if(result != 'NaN'){
         if(operator == '÷' && newOperand == 0){
           result = 'NaN';
-          displayStringNum = 'NaN';
+          StringNum = 'NaN';
         }
         else{
           result = operate(result, newOperand, operator);
-          asignNewOperand = false;
-          displayStringNum = String(result);
+          newOperand = result;
+          StringNum = String(result);
         }
       }
       else{
-        displayStringNum = 'NaN';
+        StringNum = 'NaN';
       }
     }
 
+    indexOfTen = 0;
     asignNewOperand = false;
     inputStart = false;
     calculateResult = true;
-    calculatorScreen.textContent = displayStringNum;
+    calculatorScreen.textContent = StringNum;
   })
 
   clearOpButtons.addEventListener('click', event => {
@@ -205,9 +232,13 @@ function Calculation(){
     asignNewOperand = false;
     displayStringNum = '0';
     newOperand = 0;
+    StringNum = '0';
+    indexOfTen = 0;
     result = 0;
     operator = '+';
     calculatorScreen.textContent = displayStringNum;
+
+    console.clear()
   })
 }
 
