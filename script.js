@@ -69,19 +69,27 @@ function modifyOutputStringNum(result) {
   displayNum = result;
   displayStringNum = String(result);
 
-  if(displayStringNum.includes('.')){
+  if(displayStringNum.includes('.')){ 
+    let floatLength = 13;
+
     // if the float dot in reslt is in the middle of screen, keep it
     // the length of digit on screen will be 14
     if(displayStringNum.length >= 14){
-      displayNum = preciseRound(displayNum, 14);
-      displayStringNum = String(displayNum);
-      displayStringNum = displayStringNum.substring(0, 14);
-    }
-    // if the float dot in result is in the tail of screen, discard it
-    // the length of digit on screen will be 13
-    else{
-      displayNum = preciseRound(displayNum, displayStringNum.length);
-      displayStringNum = String(displayNum);
+      // if the float dot in StringNum is in the middle of screen, keep it
+      // the length of digit on screen will be 14, and the length of float reserved will be floatLength
+      if(displayStringNum.indexOf('.') < 13){
+        floatLength = 13 - displayStringNum.indexOf('.');
+        //displayNum = preciseRound(displayNum, 13);
+        displayNum = preciseRound(displayNum, floatLength);
+        displayStringNum = String(displayNum);
+        displayStringNum = displayStringNum.substring(0, 14);
+      }
+      // if the float dot in StringNum is in the tail of screen, discard it
+      // the length of digit on screen will be 13
+      else{
+        displayStringNum = String(displayNum);
+        displayStringNum = displayStringNum.substring(0, 13);
+      }
     }
   }
   else{
@@ -130,14 +138,14 @@ function Calculation(){
           result = 0;
           newOperand = 0;
           operator = '+';
+
+          // if the newly input number is 0, the input is stil invalid
+          if(inputStringNum != '0'){
+            calculateResult = false;
+          }
         }
 
-        // if the newly input number is 0, the input is stil invalid
-        if(calculateResult == true && inputStringNum != '0' ){
-          inputStart = true;
-          calculateResult = false;
-        }
-
+        inputStart = true;
         //update number on screen
         StringNum = inputStringNum;
         //update number in operand
