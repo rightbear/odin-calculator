@@ -79,7 +79,6 @@ function modifyOutputStringNum(result) {
       // the length of digit on screen will be 14, and the length of float reserved will be floatLength
       if(displayStringNum.indexOf('.') < 13){
         floatLength = 13 - displayStringNum.indexOf('.');
-        //displayNum = preciseRound(displayNum, 13);
         displayNum = preciseRound(displayNum, floatLength);
         displayStringNum = String(displayNum);
         displayStringNum = displayStringNum.substring(0, 14);
