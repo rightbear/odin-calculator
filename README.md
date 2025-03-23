@@ -1,7 +1,7 @@
 # odin-calculator
 Project: Calculator
 
-This is the fifth project to work in the "JavaScript Basics"
+This is the fifth project to after finishing the "JavaScript Basics"
 
 Github page: https://rightbear.github.io/odin-calculator/
 
